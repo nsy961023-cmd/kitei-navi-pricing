@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>料金プラン | Kitei Navi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', 'Noto Sans JP', sans-serif; color: #161616; background: #fff; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Header ─── */
+    .header {
+      background: #1f9b97;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 64px; gap: 16px;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 8px; height: 32px; }
+    .logo-icon { position: relative; width: 130.648px; height: 25.996px; flex-shrink: 0; }
+    .logo-icon img { position: absolute; max-width: none; }
+    .nav { display: flex; gap: 32px; align-items: center; }
+    .nav a { color: #fff; text-decoration: none; font-size: 16px; font-weight: 500; letter-spacing: -0.08px; white-space: nowrap; }
+    .nav a.nav-cta { font-weight: 800; }
+    .nav-toggle {
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px; padding: 4px;
+    }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; }
+
+    /* ─── Hero + Cards wrapper ─── */
+    .pricing-top {
+      background: linear-gradient(180deg, #1f9b97 0%, #1f9b97 30%, #ffffff 80%);
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .hero {
+      display: flex; align-items: center; justify-content: center;
+      padding: 60px 40px 48px; width: 100%;
+    }
+    .hero-inner {
+      display: flex; flex-direction: column; gap: 24px;
+      align-items: center; max-width: 860px; text-align: center;
+    }
+    .hero-badge {
+      background: #167a77; color: #fff; font-size: 14px; font-weight: 700;
+      padding: 8.5px 16px; border-radius: 9999px; letter-spacing: -0.15px; white-space: nowrap;
+    }
+    .hero-title {
+      font-family: 'Noto Sans JP', sans-serif; font-size: 43px; font-weight: 700;
+      color: #fff; letter-spacing: 1.32px; line-height: 55.9px;
+    }
+    .hero-desc {
+      font-size: 20px; color: rgba(241,241,241,0.95);
+      letter-spacing: -0.449px; line-height: 32.5px;
+    }
+
+    /* ─── Pricing Cards ─── */
+    .cards-wrap {
+      width: 100%; max-width: 1280px;
+      padding: 0 48px 100px;
+      display: flex; gap: 20px; align-items: stretch;
+    }
+    .plan-card {
+      flex: 1 0 0; background: #fff;
+      border: 1px solid #cfe0d3; border-radius: 16px;
+      position: relative; display: flex; flex-direction: column;
+      padding: 35px 28px 32px; min-height: 675px;
+    }
+    .plan-card.plan-popular { background: #167a77; border-color: #167a77; }
+
+    .plan-label {
+      font-size: 12px; font-weight: 700; color: #2d7a4f;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      line-height: 19.2px; margin-bottom: 20px;
+    }
+    .plan-card.plan-popular .plan-label { color: rgba(255,255,255,0.75); }
+
+    .plan-name {
+      font-family: 'Noto Sans JP', sans-serif; font-size: 26px; font-weight: 500;
+      color: #1a2e1f; line-height: 41.6px;
+    }
+    .plan-card.plan-popular .plan-name { color: #fff; }
+
+    .plan-desc {
+      font-size: 14px; color: #6b7d6e; line-height: 21px; margin-top: 4px; margin-bottom: 24px;
+    }
+    .plan-card.plan-popular .plan-desc { color: rgba(255,255,255,0.75); }
+
+    .plan-price-row {
+      display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; position: relative; height: 42px;
+    }
+    .plan-price {
+      font-family: 'Noto Sans JP', sans-serif; font-size: 42px; font-weight: 900;
+      color: #1a2e1f; line-height: 42px;
+    }
+    .plan-card.plan-popular .plan-price { color: #fff; }
+    .plan-price-period { font-size: 14px; color: #6b7d6e; line-height: 14px; align-self: flex-end; margin-bottom: 4px; }
+    .plan-card.plan-popular .plan-price-period { color: rgba(255,255,255,0.75); }
+
+    .plan-price-custom {
+      font-family: 'Noto Sans JP', sans-serif; font-size: 28px; font-weight: 500;
+      color: #1a2e1f; line-height: 28px; margin-bottom: 4px;
+    }
+    .plan-price-est { font-size: 14px; color: #6b7d6e; }
+
+    .plan-note {
+      font-size: 13px; color: #6b7d6e; line-height: 20.8px; margin-bottom: 24px;
+    }
+    .plan-card.plan-popular .plan-note { color: rgba(255,255,255,0.75); }
+
+    .plan-sep { height: 1px; background: #cfe0d3; margin-bottom: 24px; }
+    .plan-card.plan-popular .plan-sep { background: rgba(255,255,255,0.25); }
+
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 9.9px; flex: 1; margin-bottom: 32px; }
+    .plan-feature { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #1a2e1f; line-height: 22.4px; }
+    .plan-card.plan-popular .plan-feature { color: #fff; }
+
+    .plan-check {
+      width: 20px; height: 20px; flex-shrink: 0;
+      background: rgba(45,122,79,0.1); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: #2d7a4f; padding-bottom: 1px;
+    }
+    .plan-card.plan-popular .plan-check { background: rgba(255,255,255,0.2); color: #fff; }
+
+    .plan-btn {
+      display: flex; align-items: center; justify-content: center;
+      height: 48px; border-radius: 8px;
+      font-family: 'Noto Sans JP', sans-serif; font-size: 15px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      border: 1.5px solid #1f9b97; color: #1f9b97; background: transparent;
+      letter-spacing: -0.15px;
+    }
+    .plan-card.plan-popular .plan-btn {
+      background: #fff; color: #167a77; border-color: #fff; font-weight: 700;
+    }
+
+    /* ─── Divider ─── */
+    .divider-dark { background: #167a77; height: 25px; width: 100%; }
+
+    /* ─── Section Heading ─── */
+    .section-head {
+      display: flex; flex-direction: column; gap: 8px;
+      align-items: center; padding: 60px 24px 40px; text-align: center;
+    }
+    .section-head h2 {
+      font-size: 36px; font-weight: 400; color: #161616;
+      line-height: 40px; letter-spacing: 0.369px;
+    }
+    .section-head p {
+      font-size: 18px; color: #525252; line-height: 28px;
+      letter-spacing: -0.44px; max-width: 680px;
+    }
+
+    /* ─── FAQ ─── */
+    .faq-section { padding: 0 64px 60px; }
+    .faq-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 20px; max-width: 1040px; margin: 0 auto;
+    }
+    .faq-card {
+      background: #fff; border: 1px solid #cfe0d3; border-radius: 12px;
+      padding: 28px 29px; display: flex; flex-direction: column; gap: 10.9px;
+    }
+    .faq-q-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .faq-q {
+      font-family: 'Noto Sans JP', sans-serif; font-size: 17.9px; font-weight: 500;
+      color: #1a2e1f; line-height: 28.8px; flex: 1;
+    }
+    .faq-arrow { font-size: 16px; font-weight: 700; color: #2d7a4f; line-height: 25.6px; flex-shrink: 0; }
+    .faq-a { font-size: 14px; color: #6b7d6e; line-height: 23.8px; }
+
+    /* ─── Comparison Table ─── */
+    .table-section { padding: 0 24px 60px; }
+    .table-wrap {
+      max-width: 1040px; margin: 0 auto;
+      border: 1px solid #cfe0d3; border-radius: 16px; overflow: hidden;
+    }
+    .cmp-table { width: 100%; border-collapse: collapse; }
+    .cmp-table th {
+      padding: 18px 20px; text-align: center;
+      border-bottom: 1px solid #cfe0d3;
+      font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 500; color: #1a2e1f;
+    }
+    .cmp-table th:first-child { text-align: left; width: 35%; }
+    .cmp-table th.col-g { background: rgba(26,61,43,0.04); }
+    .th-plan-label { font-size: 11px; font-weight: 700; color: #2d7a4f; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+    .th-star { color: #f5a623; }
+
+    .cat-row td {
+      background: #f0f7f4; padding: 10px 20px;
+      font-size: 12px; font-weight: 700; color: #2d7a4f;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      border-bottom: 1px solid #cfe0d3;
+    }
+    .cmp-table td {
+      padding: 16px 20px; border-bottom: 1px solid #cfe0d3;
+      text-align: center; font-size: 14px; color: #1a2e1f; line-height: 22.4px;
+    }
+    .cmp-table td:first-child { text-align: left; }
+    .cmp-table td.col-g { background: rgba(26,61,43,0.04); }
+    .cmp-table tr:last-child td { border-bottom: none; }
+
+    .tbl-check {
+      display: inline-flex; width: 22px; height: 22px;
+      background: rgba(45,122,79,0.1); border-radius: 50%;
+      align-items: center; justify-content: center;
+      font-size: 13px; color: #2d7a4f; vertical-align: middle;
+    }
+    .tbl-dash { color: #cfe0d3; font-size: 20px; line-height: 1; }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      background: #1f9b97;
+      display: flex; flex-direction: column;
+      gap: 37px; align-items: center; justify-content: center;
+      padding: 218px 40px; text-align: center;
+    }
+    .cta-title {
+      font-family: 'Noto Sans JP', sans-serif; font-size: 36px; font-weight: 400;
+      color: #fff; line-height: 40px; letter-spacing: 0.369px;
+    }
+    .cta-desc {
+      font-size: 20px; color: rgba(255,255,255,0.9);
+      line-height: 32.5px; letter-spacing: -0.449px; max-width: 700px;
+    }
+    .cta-btn {
+      background: #fff; color: #1f9b97; border: 1px solid #fff; border-radius: 6px;
+      height: 56px; padding: 0 34px;
+      font-family: 'Noto Sans JP', sans-serif; font-size: 16px; font-weight: 500;
+      letter-spacing: -0.31px; cursor: pointer; display: inline-flex; align-items: center;
+      text-decoration: none; white-space: nowrap;
+    }
+
+    /* ─── Footer ─── */
+    footer { padding: 0 64px 120px; overflow: hidden; }
+    .footer-inner {
+      border-top: 1px solid rgba(0,0,0,0.1); display: flex;
+      gap: 120px; align-items: flex-start; padding: 80px 0; flex-wrap: wrap;
+    }
+    .footer-brand { flex: 1 0 200px; display: flex; flex-direction: column; gap: 56px; }
+    .footer-brand-text { display: flex; flex-direction: column; gap: 8px; }
+    .footer-tagline { font-size: 14px; color: #525252; letter-spacing: -0.15px; line-height: 22.75px; margin-top: 8px; }
+    .footer-socials { display: flex; gap: 24px; align-items: center; }
+    .footer-socials button { background: none; border: none; cursor: pointer; width: 24px; height: 24px; padding: 0; overflow: hidden; }
+    .footer-socials button img { width: 24px; height: 24px; object-fit: contain; }
+    .footer-nav { display: flex; gap: 40px; flex-shrink: 0; flex-wrap: wrap; }
+    .footer-nav-col { display: flex; flex-direction: column; gap: 8px; width: 130px; }
+    .footer-nav-hd { font-size: 16px; font-weight: 600; color: #000; letter-spacing: -0.08px; line-height: 1.45; padding-bottom: 16px; }
+    .footer-nav-col a { font-size: 16px; font-weight: 500; color: rgba(0,0,0,0.55); letter-spacing: -0.08px; line-height: 1.45; text-decoration: none; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .header { padding: 20px 32px; }
+      .cards-wrap { flex-wrap: wrap; padding: 0 24px 60px; }
+      .plan-card { min-width: calc(50% - 10px); flex: 1 0 calc(50% - 10px); min-height: auto; }
+      .faq-section { padding: 0 32px 60px; }
+      .table-section { padding: 0 16px 60px; }
+      footer { padding: 0 32px 80px; }
+      .footer-inner { gap: 48px; }
+    }
+    @media (max-width: 767px) {
+      .header { padding: 16px 20px; position: relative; }
+      .nav {
+        display: none; flex-direction: column; align-items: flex-start; gap: 16px;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: #1a8884; padding: 20px; z-index: 100;
+      }
+      .nav.is-open { display: flex; }
+      .nav-toggle { display: flex; }
+      .hero-title { font-size: 28px; line-height: 1.3; }
+      .hero-desc { font-size: 15px; }
+      .cards-wrap { flex-direction: column; padding: 0 16px 48px; }
+      .plan-card { min-height: auto; }
+      .faq-section { padding: 0 16px 48px; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .table-section { padding: 0 8px 48px; overflow-x: auto; }
+      .cmp-table th, .cmp-table td { padding: 12px 8px; font-size: 12px; }
+      .cta-section { padding: 80px 20px; }
+      .cta-title { font-size: 26px; }
+      .cta-desc { font-size: 16px; }
+      footer { padding: 0 20px 60px; }
+      .footer-inner { flex-direction: column; gap: 40px; padding: 48px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ HEADER ════════════════════ -->
+<header class="header">
+  <div class="logo-wrap">
+    <div class="logo-icon" aria-label="KiteiNavi">
+      <img style="top:0;right:0;bottom:1.94%;left:96.29%;width:3.71%;height:98.06%;" src="https://www.figma.com/api/mcp/asset/8ba61632-2f9d-4790-9d7b-857e71308a00" alt="">
+      <img style="top:28.2%;right:4.54%;bottom:1.94%;left:80.45%;width:15.01%;height:69.86%;" src="https://www.figma.com/api/mcp/asset/ff021d15-9b1b-4331-b0a5-33f877e81c47" alt="">
+      <img style="top:26.13%;right:20.11%;bottom:0;left:65.37%;width:14.52%;height:73.87%;" src="https://www.figma.com/api/mcp/asset/cb0722db-4168-4833-8f3a-6d19f7455b10" alt="">
+      <img style="top:7.51%;right:36.3%;bottom:1.94%;left:48.31%;width:15.39%;height:90.55%;" src="https://www.figma.com/api/mcp/asset/5be58f2a-2764-4eff-add0-0c32530e30cf" alt="">
+      <img style="top:0;right:53.73%;bottom:1.94%;left:42.56%;width:3.71%;height:98.06%;" src="https://www.figma.com/api/mcp/asset/fe25b9ac-fc27-45f9-8cb7-dc99813ea172" alt="">
+      <img style="top:26.01%;right:58.87%;bottom:0;left:28.47%;width:12.66%;height:73.99%;" src="https://www.figma.com/api/mcp/asset/8042df6a-453b-4d9f-aef1-15cc3b78a20a" alt="">
+      <img style="top:14.88%;right:72.08%;bottom:1.94%;left:21.43%;width:6.49%;height:83.18%;" src="https://www.figma.com/api/mcp/asset/d76205c6-6449-4324-84ad-4ca0c99c50ae" alt="">
+      <img style="top:0;right:80.38%;bottom:1.94%;left:15.91%;width:3.71%;height:98.06%;" src="https://www.figma.com/api/mcp/asset/c1a00e13-1236-41d0-a796-47cad4e32bf0" alt="">
+      <img style="top:7.51%;right:84.68%;bottom:1.94%;left:0;width:15.32%;height:90.55%;" src="https://www.figma.com/api/mcp/asset/c25ea695-894b-4c65-a6e2-64b19b3d7f94" alt="">
+    </div>
+  </div>
+
+  <button class="nav-toggle" aria-label="メニューを開く"
+    onclick="this.closest('header').querySelector('.nav').classList.toggle('is-open')">
+    <span></span><span></span><span></span>
+  </button>
+
+  <nav class="nav">
+    <a href="#">機能</a>
+    <a href="#">料金</a>
+    <a href="#" class="nav-cta">デモを申し込む</a>
+    <a href="#">お問い合わせ</a>
+    <a href="#">セキュリティ</a>
+  </nav>
+</header>
+
+<!-- ════════════════════ HERO + PRICING CARDS ════════════════════ -->
+<div class="pricing-top">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-badge">Pricing</span>
+      <h1 class="hero-title">すべての企業に、<br>シンプルな料金を。</h1>
+      <p class="hero-desc">まず無料で始め、成長に合わせて拡張できます。</p>
+    </div>
+  </section>
+
+  <div class="cards-wrap">
+
+    <!-- Free Trial -->
+    <div class="plan-card">
+      <div class="plan-label">Free Trial</div>
+      <div class="plan-name">お試し<br>プラン</div>
+      <div class="plan-desc">まずは試してみたいチームに。リスクゼロで始められます。</div>
+      <div class="plan-price-row">
+        <span class="plan-price">¥0</span>
+        <span class="plan-price-period">/ 3ヶ月</span>
+      </div>
+      <div class="plan-note">クレジットカード不要</div>
+      <div class="plan-sep"></div>
+      <ul class="plan-features">
+        <li class="plan-feature"><span class="plan-check">✓</span>基本Q&A機能</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>問い合わせ管理</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>最大10名まで</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>メールサポート</li>
+      </ul>
+      <a href="#" class="plan-btn">無料で始める</a>
+    </div>
+
+    <!-- SMB -->
+    <div class="plan-card">
+      <div class="plan-label">SMB Plan</div>
+      <div class="plan-name">スモール<br>ビジネス</div>
+      <div class="plan-desc">成長中の中小企業に最適。HR管理者2名まで対応。</div>
+      <div class="plan-price-row">
+        <span class="plan-price">¥100</span>
+        <span class="plan-price-period">/ 席・月</span>
+      </div>
+      <div class="plan-note">+ ¥5,000 / HR管理者（最大2名）</div>
+      <div class="plan-sep"></div>
+      <ul class="plan-features">
+        <li class="plan-feature"><span class="plan-check">✓</span>ダッシュボード</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>規程ガイダンス</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>基本Q&A・問い合わせ管理</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>HR管理者2名まで</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>チャットサポート</li>
+      </ul>
+      <a href="#" class="plan-btn">プランを選ぶ</a>
+    </div>
+
+    <!-- Growth (popular) -->
+    <div class="plan-card plan-popular">
+      <div class="plan-label">Growth Plan</div>
+      <div class="plan-name">グロース<br>プラン</div>
+      <div class="plan-desc">拡大フェーズのチームに。判例統合と分析機能で意思決定をサポート。</div>
+      <div class="plan-price-row">
+        <span class="plan-price">¥60</span>
+        <span class="plan-price-period">/ 席・月</span>
+      </div>
+      <div class="plan-note">+ ¥10,000 / HR管理者（最大5名）</div>
+      <div class="plan-sep"></div>
+      <ul class="plan-features">
+        <li class="plan-feature"><span class="plan-check">✓</span>SMBプランの全機能</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>判例統合機能</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>高度な分析レポート</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>HR管理者5名まで</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>優先サポート</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>チャットサポート</li>
+      </ul>
+      <a href="#" class="plan-btn">プランを選ぶ</a>
+    </div>
+
+    <!-- Enterprise -->
+    <div class="plan-card">
+      <div class="plan-label">Enterprise</div>
+      <div class="plan-name">エンタープライズ</div>
+      <div class="plan-desc">大規模組織・複雑なニーズに。完全カスタマイズで導入から支援。</div>
+      <div style="margin-bottom:8px;">
+        <div class="plan-price-custom">カスタム</div>
+        <div class="plan-price-est">お見積もり</div>
+      </div>
+      <div class="plan-note">規模に応じた柔軟な料金設定</div>
+      <div class="plan-sep"></div>
+      <ul class="plan-features">
+        <li class="plan-feature"><span class="plan-check">✓</span>グロースプランの全機能</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>上級システム統合</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>専任オンボーディング</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>HR管理者 無制限</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>SLAサポート</li>
+        <li class="plan-feature"><span class="plan-check">✓</span>セキュリティ監査</li>
+      </ul>
+      <a href="#" class="plan-btn">お問い合わせ</a>
+    </div>
+
+  </div><!-- /cards-wrap -->
+</div><!-- /pricing-top -->
+
+<div class="divider-dark"></div>
+
+<!-- ════════════════════ FAQ ════════════════════ -->
+<div class="section-head">
+  <h2>よくあるご質問</h2>
+  <p>料金やご利用に関するよくある疑問にお答えします。</p>
+</div>
+
+<section class="faq-section">
+  <div class="faq-grid">
+
+    <div class="faq-card">
+      <div class="faq-q-row">
+        <p class="faq-q">無料トライアルの後はどうなりますか？</p>
+        <span class="faq-arrow">↓</span>
+      </div>
+      <p class="faq-a">3ヶ月の無料期間終了後、自動的に課金されることはありません。引き続きご利用の場合は、ご希望のプランをお選びいただきます。</p>
+    </div>
+
+    <div class="faq-card">
+      <div class="faq-q-row">
+        <p class="faq-q">途中でプランのアップグレードはできますか？</p>
+        <span class="faq-arrow">↓</span>
+      </div>
+      <p class="faq-a">いつでもアップグレードが可能です。変更は即時反映され、差額は日割り計算でご請求されます。</p>
+    </div>
+
+    <div class="faq-card">
+      <div class="faq-q-row">
+        <p class="faq-q">「席」とは何を指しますか？</p>
+        <span class="faq-arrow">↓</span>
+      </div>
+      <p class="faq-a">「席」はKiteNaviにアクセスできる従業員1人を指します。HR管理者は別途カウントされます。</p>
+    </div>
+
+    <div class="faq-card">
+      <div class="faq-q-row">
+        <p class="faq-q">請求のサイクルはどうなっていますか？</p>
+        <span class="faq-arrow">↓</span>
+      </div>
+      <p class="faq-a">月次または年次でお選びいただけます。シンプルで予測可能な料金体系のため、予算管理も簡単です。</p>
+    </div>
+
+    <div class="faq-card">
+      <div class="faq-q-row">
+        <p class="faq-q">契約期間の縛りはありますか？</p>
+        <span class="faq-arrow">↓</span>
+      </div>
+      <p class="faq-a">月次プランは縛りなし、いつでもキャンセル可能です。Enterpriseプランは年次契約となりますが、詳細は営業担当にご相談ください。</p>
+    </div>
+
+    <div class="faq-card">
+      <div class="faq-q-row">
+        <p class="faq-q">データのセキュリティはどうなっていますか？</p>
+        <span class="faq-arrow">↓</span>
+      </div>
+      <p class="faq-a">全プランでデータはSSL暗号化・国内サーバー保管です。Enterpriseプランでは独立したセキュリティ監査レポートをご提供します。</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider-dark"></div>
+
+<!-- ════════════════════ COMPARISON TABLE ════════════════════ -->
+<div class="section-head">
+  <h2>プランを比べてみる</h2>
+  <p>全プランに共通する透明な料金体系。隠れたコストはありません。</p>
+</div>
+
+<section class="table-section">
+  <div class="table-wrap">
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th>機能</th>
+          <th><span class="th-plan-label">FREE TRIAL</span>¥0</th>
+          <th><span class="th-plan-label">SMB</span>¥100<small>/席・月</small></th>
+          <th class="col-g"><span class="th-plan-label">GROWTH <span class="th-star">★</span></span>¥60<small>/席・月</small></th>
+          <th><span class="th-plan-label">ENTERPRISE</span>カスタム</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- コア機能 -->
+        <tr class="cat-row"><td colspan="5">コア機能</td></tr>
+        <tr>
+          <td>基本Q&A</td>
+          <td><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="col-g"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>問い合わせ管理</td>
+          <td><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="col-g"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>ダッシュボード</td>
+          <td><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="col-g"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>規程ガイダンス</td>
+          <td><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="col-g"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <!-- 高度な機能 -->
+        <tr class="cat-row"><td colspan="5">高度な機能</td></tr>
+        <tr>
+          <td>判例統合</td>
+          <td><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-dash">—</span></td>
+          <td class="col-g"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>分析・レポート</td>
+          <td>基本</td>
+          <td>基本</td>
+          <td class="col-g">高度</td>
+          <td>完全カスタム</td>
+        </tr>
+        <tr>
+          <td>カスタムアラート</td>
+          <td><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-dash">—</span></td>
+          <td class="col-g"><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>上級システム統合</td>
+          <td><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-dash">—</span></td>
+          <td class="col-g"><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <!-- 管理・サポート -->
+        <tr class="cat-row"><td colspan="5">管理・サポート</td></tr>
+        <tr>
+          <td>HR管理者数</td>
+          <td><span class="tbl-dash">—</span></td>
+          <td>最大2名</td>
+          <td class="col-g">最大5名</td>
+          <td>無制限</td>
+        </tr>
+        <tr>
+          <td>サポート</td>
+          <td>メール</td>
+          <td>チャット</td>
+          <td class="col-g">優先</td>
+          <td>SLA対応</td>
+        </tr>
+        <tr>
+          <td>オンボーディング</td>
+          <td>セルフ</td>
+          <td>ドキュメント</td>
+          <td class="col-g">ガイド付き</td>
+          <td>専任担当</td>
+        </tr>
+        <tr>
+          <td>セキュリティ監査</td>
+          <td><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-dash">—</span></td>
+          <td class="col-g"><span class="tbl-dash">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider-dark"></div>
+
+<!-- ════════════════════ CTA ════════════════════ -->
+<section class="cta-section">
+  <h2 class="cta-title">大規模組織・特殊なニーズに対応します。</h2>
+  <p class="cta-desc">カスタム統合、専任オンボーディング、SLAサポートなど、貴社の要件に合わせたプランをご提案します。</p>
+  <a href="#" class="cta-btn">お問い合わせ</a>
+</section>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-text">
+        <div class="logo-icon" aria-label="KiteiNavi">
+          <img style="top:0;right:0;bottom:1.94%;left:96.29%;width:3.71%;height:98.06%;" src="https://www.figma.com/api/mcp/asset/9f3734a6-7c35-4a1c-81c8-66666a78a385" alt="">
+          <img style="top:28.2%;right:4.54%;bottom:1.94%;left:80.45%;width:15.01%;height:69.86%;" src="https://www.figma.com/api/mcp/asset/60c0fd6b-c61c-4e9d-9de3-56f3c1f753ab" alt="">
+          <img style="top:26.13%;right:20.11%;bottom:0;left:65.37%;width:14.52%;height:73.87%;" src="https://www.figma.com/api/mcp/asset/6326fc8a-05e9-45c7-ba79-8a2fbdfbf991" alt="">
+          <img style="top:7.51%;right:36.3%;bottom:1.94%;left:48.31%;width:15.39%;height:90.55%;" src="https://www.figma.com/api/mcp/asset/f1738b88-6d51-4111-b484-4f8512989bb7" alt="">
+          <img style="top:0;right:53.73%;bottom:1.94%;left:42.56%;width:3.71%;height:98.06%;" src="https://www.figma.com/api/mcp/asset/b69ab744-de82-4080-8f2e-e43e18a75774" alt="">
+          <img style="top:26.01%;right:58.87%;bottom:0;left:28.47%;width:12.66%;height:73.99%;" src="https://www.figma.com/api/mcp/asset/6987ae7d-5739-4de8-b5d5-d7c97bfa0b39" alt="">
+          <img style="top:14.88%;right:72.08%;bottom:1.94%;left:21.43%;width:6.49%;height:83.18%;" src="https://www.figma.com/api/mcp/asset/44f901cf-a0b1-4f83-876b-53513150bc31" alt="">
+          <img style="top:0;right:80.38%;bottom:1.94%;left:15.91%;width:3.71%;height:98.06%;" src="https://www.figma.com/api/mcp/asset/1ee5e414-e60a-433f-8135-a7a944315f7b" alt="">
+          <img style="top:7.51%;right:84.68%;bottom:1.94%;left:0;width:15.32%;height:90.55%;" src="https://www.figma.com/api/mcp/asset/9637ffd9-51eb-481d-914b-abc2c11ffa5a" alt="">
+        </div>
+        <p class="footer-tagline">規定管理が、わかるから答えられるへ</p>
+      </div>
+      <nav class="footer-socials" aria-label="ソーシャルリンク">
+        <button><img src="https://www.figma.com/api/mcp/asset/42460920-0d15-4e9e-a520-6ff89babe4fa" alt="SNS 1"></button>
+        <button><img src="https://www.figma.com/api/mcp/asset/da9b8884-ba0e-479e-99c3-e56f733545ef" alt="SNS 2"></button>
+        <button><img src="https://www.figma.com/api/mcp/asset/cc3b04f5-e9c9-4205-9fbb-347ef6505bf7" alt="SNS 3"></button>
+      </nav>
+    </div>
+    <div class="footer-nav">
+      <nav class="footer-nav-col">
+        <div class="footer-nav-hd">Features</div>
+        <a href="#">Core features</a>
+        <a href="#">Pro experience</a>
+        <a href="#">Integrations</a>
+      </nav>
+      <nav class="footer-nav-col">
+        <div class="footer-nav-hd">Learn more</div>
+        <a href="#">Blog</a>
+        <a href="#">Case studies</a>
+        <a href="#">Customer stories</a>
+        <a href="#">Best practices</a>
+      </nav>
+      <nav class="footer-nav-col">
+        <div class="footer-nav-hd">Support</div>
+        <a href="#">Contact</a>
+        <a href="#">Support</a>
+        <a href="#">Legal</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
